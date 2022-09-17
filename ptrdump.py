@@ -13,7 +13,6 @@ s = []
 commands = ['-f', '-tls', '-r', '-s', '-arin']
 servercount = 0
 servers = len(dnsservers)
-#ipregex = re.compile('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$', re.IGNORECASE)
 ipregex = re.compile(r'[0-9]+(?:\.[0-9]+){3}', re.IGNORECASE)
 linebreak = '========================================'
 def ptrq(ip,method):
@@ -26,9 +25,8 @@ def ptrq(ip,method):
     if dnsservers[servercount] in badservers:
         findnextdns(ip,method)
     dnslst = [dnsservers[servercount]]
-    #dnslst.append(dnsservers[servercount + int(servers/2) - servers])
     dnsResolver.nameservers = dnslst
-    #while success == False:
+
     try:
         if tls:
             #answer = dnsResolver.resolve.tls(dns.reversename.from_address(ip),'PTR')
@@ -58,8 +56,7 @@ def ptrq(ip,method):
         
     except dns.resolver.NoNameservers:
         print('Broken Name Server for ' + ip)     
-        #badservers.append(dnsservers[servercount])
-        #findnextdns(ip,method)
+        
     except dns.resolver.NXDOMAIN:
         print('Domain not available for ' + ip)
         if not arin:
@@ -79,7 +76,7 @@ def findnextdns(inip,method):
     loopstart = servercount
     global dnsservers
     global servers
-    #print(servercount)
+
     if servers == 1:
         print("No remaining DNS servers, all marked as offline")
         exit()
@@ -87,9 +84,7 @@ def findnextdns(inip,method):
         servercount = 0
     else:
         servercount += 1
-    #print(servercount)
-    #print(dnsservers[servercount])
-    #print(badservers)
+
     while dnsservers[servercount] in badservers:
         
         if servercount + 1 >= servers:
